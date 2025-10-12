@@ -1,5 +1,6 @@
 package main;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 
 /**
@@ -9,9 +10,21 @@ import java.util.Iterator;
 public class Sistema {
     private ArrayList<Jugador> listaJugadores = new ArrayList<>();
     private Partida partidaActual;
+
+    public ArrayList<Jugador> getListaJugadores() {
+        return listaJugadores;
+    }
+
+    public Partida getPartidaActual() {
+        return partidaActual;
+    }
+    public void setPartidaActual(Partida partidaActual) {
+        this.partidaActual = partidaActual;
+    }
     
     public void agregarJugador(Jugador jugador){//getsetters
         this.listaJugadores.add(jugador);
+        Collections.sort(this.getListaJugadores());
     }
     public Jugador buscarJugador(String nombre){
         Jugador retorno =new Jugador("",0);//cuando se usa el metodo listaJugadores nunca esta vacia, no devuelve null
@@ -25,14 +38,19 @@ public class Sistema {
         }
         return retorno;
     }
-    public boolean jugadorDisponible(String nombre){
+    public boolean nombreDisponible(String nombre){ //Retorna true si esta disponible;
         boolean esta=true;
-        
-        Jugador jugador = this.buscarJugador(nombre);
-        if(jugador.getNombre().equals("")){
-            esta = false;
+        for(int i=0;i<this.getListaJugadores().size();i++){
+            if(nombre.equals(this.getListaJugadores().get(i).getNombre())){
+                esta = false;
+            }
         }
         return esta;
     }
+    
     //JUGADORES GANADORES, pendiente hasta saber ordenar arraylist
+    
+    
+    
+    
 }

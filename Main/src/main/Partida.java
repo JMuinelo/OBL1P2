@@ -2,23 +2,33 @@ package main;
 
 /**
  *
+ * 
  * @author Toto
  */
 public class Partida {
-    private Ficha[][]tablero;
+    private String[][]tablero; //Celdas del tipo BD, NC
     private boolean partidaFinalizada;
-    private JugadorEnPartida jugadorBlanco;
-    private JugadorEnPartida jugadorNegro;
+    private Jugador jugadorBlanco;
+    private Jugador jugadorNegro;
+    private char turno;
+
+    public char getTurno() {
+        return turno;
+    }
+
+    public void setTurno(char turno) {
+        this.turno = turno;
+    }
     
-    public Ficha[][] getTablero() {
+    public String[][] getTablero() {
         return tablero;
     }
 
-    public void setTablero(Ficha[][] tablero) {
+    public void setTablero(String[][] tablero) {
         this.tablero = tablero;
     }
 
-    public boolean isPartidaFinalizada() {
+    public boolean getPartidaFinalizada() {
         return partidaFinalizada;
     }
 
@@ -26,61 +36,32 @@ public class Partida {
         this.partidaFinalizada = partidaFinalizada;
     }
 
-    public JugadorEnPartida getJugadorBlanco() {
+    public Jugador getJugadorBlanco() {
         return jugadorBlanco;
     }
 
-    public void setJugadorBlanco(JugadorEnPartida jugadorBlanco) {
+    public void setJugadorBlanco(Jugador jugadorBlanco) {
         this.jugadorBlanco = jugadorBlanco;
     }
 
-    public JugadorEnPartida getJugadorNegro() {
+    public Jugador getJugadorNegro() {
         return jugadorNegro;
     }
 
-    public void setJugadorNegro(JugadorEnPartida jugadorNegro) {
+    public void setJugadorNegro(Jugador jugadorNegro) {
         this.jugadorNegro = jugadorNegro;
     }
-    public Partida(JugadorEnPartida jb, JugadorEnPartida jn){
+    public Partida(Jugador jb, Jugador jn){
         this.setJugadorBlanco(jb);
         this.setJugadorNegro(jn);
         this.setPartidaFinalizada(false);
-        this.setTablero(new Ficha[3][6]);
+        this.setTablero(new String[3][6]);
+        this.setTurno('B');
+        
         
     }
-    
-    ///////////////////////
-    ///
-    private String[][] tableroStr = {
-    {" "," "," ","1"," "," ","2"," "," ","3"," "," ","4"," "," ","5"," "," ","6"," "},
-    {" ","+","-","-","+","-","-","+","-","-","+","-","-","+","-","-","+","-","-","+"},
-    {" ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"},
-    {"A","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"},
-    {" ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"},
-    {" ","+","-","-","+","-","-","+","-","-","+","-","-","+","-","-","+","-","-","+"},
-    {" ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"},
-    {"B","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"},
-    {" ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"},
-    {" ","+","-","-","+","-","-","+","-","-","+","-","-","+","-","-","+","-","-","+"},
-    {" ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"},
-    {"C","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"},
-    {" ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"},
-    {" ","+","-","-","+","-","-","+","-","-","+","-","-","+","-","-","+","-","-","+"},
-    };
-
-    public String[][] getTableroStr() {
-        return tableroStr;
-    }
-
-    public void setTableroStr(String[][] tableroStr) {
-        this.tableroStr = tableroStr;
-    }
-    
-    
     
     public void mostrarMatriz(String[][] mat){
-        
-        
         for(int i=0;i<mat.length;i++){
             for(int j=0;j<mat[i].length;j++){
                 System.out.print(mat[i][j]+ " ");
@@ -89,9 +70,10 @@ public class Partida {
         }
     }
 
-    public void agregarFicha(Ficha ficha,int fila, int col){
+    public void agregarFicha(String ficha,int fila, int col){
         tablero[fila][col] = ficha;
     }
+    /*
     public void sacarBordes(){
         String[] caracteres = {"A","B","C","1","2","3","4","5","6"};
         
@@ -128,5 +110,5 @@ public class Partida {
       for(int j=0;j<colNum.length;j++){
           this.getTableroStr()[0][colNum[j]]=datoNum[j];
       }
-    }
-}
+    }*/
+}   

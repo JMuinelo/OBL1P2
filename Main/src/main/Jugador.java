@@ -3,7 +3,7 @@ package main;
  *
  * @author Toto
  */
-public class Jugador {
+public class Jugador implements Comparable<Jugador>{
     private String nombre;
     private int edad;
     private int partidasJugadas;
@@ -59,14 +59,14 @@ public class Jugador {
     }
     ///////
     
-    /*
-    public boolean compararJugadorCon(Jugador otroJugador){ //para validar el nombre
-            return this.getNombre().equals(otroJugador.getNombre());
-    } 
-
-    */
+    
     public boolean estaInvicto(){
         return this.getPartidasGanadas() == this.getPartidasJugadas(); //cuando empatan restar uno a partidas jugadas
+    }
+    
+    @Override
+    public int compareTo(Jugador unJugador){
+        return this.getNombre().compareTo(unJugador.getNombre());
     }
     
     
