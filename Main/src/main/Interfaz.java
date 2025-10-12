@@ -101,32 +101,42 @@ public class Interfaz {
         int max = sistema.getListaJugadores().size();
         int jug1 = 0;
         int jug2 = -1;
-        while(opcion > max || opcion  <= 0){
-            System.out.println("***** Lisa de Jugadores *****");
+        boolean loop = true;
+        /////////////////////////////////////////////////////////
+        
+        System.out.println("***** Lista de Jugadores *****");
+        for(int i=0; i < sistema.getListaJugadores().size(); i++){
+            System.out.println("\n"+(i+1)+". "+sistema.getListaJugadores().get(i).getNombre());
+        }
+        jug1 = pedirNumero("Seleccione el 1er jugador: ", 1, max) - 1;
+            
+        while(loop){
+            System.out.println("***** Lista de Jugadores *****");
             for(int i=0; i < sistema.getListaJugadores().size(); i++){
                 System.out.println("\n"+(i+1)+". "+sistema.getListaJugadores().get(i).getNombre());
             }
-            jug1 = pedirNumero("Seleccione el 1er jugador: ", 0, max) - 1;
-            while(((opcion > max || opcion  <= 0) && jug2 == jug1)){
-                System.out.println("***** Lisa de Jugadores *****");
-                for(int i=0; i < sistema.getListaJugadores().size(); i++){
-                    System.out.println("\n"+(i+1)+". "+sistema.getListaJugadores().get(i).getNombre());
-                }
-                jug1 = pedirNumero("Seleccione el 2do jugador: ", 0, max) - 1;
-                if(jug2 == jug1){
-                    System.out.println("\nADVERTENCIA: Los jugadores no pueden ser iguales");
-                }
+            jug2 = pedirNumero("Seleccione el 2do jugador: ", 1, max) - 1;
+            loop = false;
+                
+            if(jug2 == jug1){
+                System.out.println("\nADVERTENCIA: Los jugadores no pueden ser iguales");
+                loop = true;
             }
-        }
+        }//En este punto jug1 y jug2 tienen los valores de los indices del respectivo jugador en el arraylist de jugadores
         sistema.setPartidaActual(new Partida(sistema.getListaJugadores().get(jug1), sistema.getListaJugadores().get(jug2)));
     }
     
     public static void comenzarPartida(Sistema sistema){
-        seleccionarJugadores(sistema);
-        while(!sistema.getPartidaActual().getPartidaFinalizada()){
-            System.out.println("TURNO DE: "+sistema.getPartidaActual().getTurno());
+        if(sistema.getListaJugadores().size() > 1){
+            seleccionarJugadores(sistema);
+            while(!sistema.getPartidaActual().getPartidaFinalizada()){
+                System.out.println("TURNO DE: "+sistema.getPartidaActual().getTurno());
             
+            }
+        }else{
+            System.out.println("No hay suficientes jugadores para comenzar una nueva partida.");
         }
+        
         
         
     }
@@ -168,7 +178,7 @@ public class Interfaz {
             }
             else{
                 System.out.println("Valor Fuera de Rango"+"("+min+"-"+max+"), reingrese:");
-                numero = in.nextInt();
+                //numero = in.nextInt();
             }
             }catch(InputMismatchException e){
                 System.out.println("Ingrese solo numeros");

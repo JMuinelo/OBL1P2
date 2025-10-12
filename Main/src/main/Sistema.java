@@ -41,7 +41,7 @@ public class Sistema {
     public boolean nombreDisponible(String nombre){ //Retorna true si esta disponible;
         boolean esta=true;
         for(int i=0;i<this.getListaJugadores().size();i++){
-            if(nombre.equals(this.getListaJugadores().get(i).getNombre())){
+            if(nombre.toUpperCase().equals((this.getListaJugadores().get(i).getNombre()).toUpperCase())){
                 esta = false;
             }
         }
