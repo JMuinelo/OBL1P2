@@ -56,23 +56,117 @@ public class Partida {
         this.setJugadorNegro(jn);
         this.setPartidaFinalizada(false);
         this.setTablero(new String[3][6]);
+        for (int i = 0; i < tablero.length; i++) {
+            for (int j = 0; j < tablero[0].length; j++) {
+                tablero[i][j] = "  ";
+            }
+        }
+        //Para que el tablero no comience en null
         this.setTurno('B');
         
         
     }
     
-    public void mostrarMatriz(String[][] mat){
-        for(int i=0;i<mat.length;i++){
-            for(int j=0;j<mat[i].length;j++){
-                System.out.print(mat[i][j]+ " ");
-            }
-            System.out.println(" ");
+    public void procesarJugada(String jugada){
+        //la funcion asume datos validos
+        String ficha = "";
+        ficha += jugada.charAt(2);
+        ficha+= (this.getTurno()+"");
+        int col = (int)jugada.charAt(1)-1;
+        int fila =0;
+        if(jugada.charAt(0)=='A'){
+            fila=0;
+        }else if(jugada.charAt(0)=='B'){
+            fila=1;
+
+        }else{
+            fila=2;
+
         }
     }
+  
+    public void mostrarTablero(String[][] tablero, boolean mostrar){
+        String[] letras ={"A","B","C"}; 
+        
+        if(mostrar){
+            System.out.println("   1  2  3  4  5  6");
+        }
+        String linea = " +--+--+--+--+--+--+";
+        System.out.println(linea);
+        for (int i = 0; i < tablero.length; i++) {
+            for (int z = 0; z < 3; z++) {
+                String fila;
+                if((z % 2 != 0) && mostrar){
+                    fila = letras[i]+"|";
+                }else{
+                    fila = " |";
+                }
+                
+                for (int j = 0; j < tablero[0].length; j++) {
+                    if ((tablero[i][j].charAt(1) + "").equals("N")) {
+                        if ((tablero[i][j].charAt(0) + "").equals("C")) {
+                            if (z % 2 == 0) {
+                                fila += " ●|";
+                            } else {
+                                fila += "● |";
+                            }
+                        }
+                        if ((tablero[i][j].charAt(0) + "").equals("D")) {
+                            if (z % 2 == 0) {
+                                fila += "● |";
+                            } else {
+                                fila += " ●|";
+                            }
+                        }
+                    } else {
+                        if ((tablero[i][j].charAt(1) + "").equals("B")) {
+                            if ((tablero[i][j].charAt(0) + "").equals("C")) {
+                                if (z % 2 == 0) {
+                                    fila += " ○|";
+                                } else {
+                                    fila += "○ |";
+                                }
+                            }
+                            if ((tablero[i][j].charAt(0) + "").equals("D")) {
+                                if (z % 2 == 0) {
+                                    fila += "○ |";
+                                } else {
+                                    fila += " ○|";
+                                }
+                            }
+                        } else {
+                            fila += "  |";
+                        }
+                    }
 
-    public void agregarFicha(String ficha,int fila, int col){
-        tablero[fila][col] = ficha;
+                }
+                System.out.println(fila);
+            }
+            System.out.println(linea);
+        }
+
     }
+    
+    
+    /*
+        String[][] tableroStr = {
+    {" "," "," ","1"," "," ","2"," "," ","3"," "," ","4"," "," ","5"," "," ","6"," "},
+    {" ","+","-","-","+","-","-","+","-","-","+","-","-","+","-","-","+","-","-","+"},
+    {" ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"},
+    {"A","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"},
+    {" ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"},
+    {" ","+","-","-","+","-","-","+","-","-","+","-","-","+","-","-","+","-","-","+"},
+    {" ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"},
+    {"B","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"},
+    {" ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"},
+    {" ","+","-","-","+","-","-","+","-","-","+","-","-","+","-","-","+","-","-","+"},
+    {" ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"},
+    {"C","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"},
+    {" ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"},
+    {" ","+","-","-","+","-","-","+","-","-","+","-","-","+","-","-","+","-","-","+"},
+    }; */
+    
+    
     /*
     public void sacarBordes(){
         String[] caracteres = {"A","B","C","1","2","3","4","5","6"};
