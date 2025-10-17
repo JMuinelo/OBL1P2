@@ -94,8 +94,9 @@ public class Partida {
         //la funcion asume datos validos
         if (jugada.length() == 3) {
             String ficha = "";
-            int col = (int)jugada.charAt(1) - 1;
-            int fila = 0;
+            //funcion random
+            int col = Character.getNumericValue(jugada.charAt(1)) - 1;
+            int fila = 2;
 
             if (jugada.charAt(0) == 'A') {
                 fila = 0;
@@ -106,7 +107,7 @@ public class Partida {
                 fila = 2;
 
             }
-            if (!(jugada.charAt(2) == 'I')) {
+            if (jugada.charAt(2) != 'I') {
                 ficha += jugada.charAt(2);
                 ficha += (this.getTurno() + "");
                 this.agregarFicha(ficha, fila, col);

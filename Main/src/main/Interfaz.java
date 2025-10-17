@@ -215,19 +215,16 @@ public class Interfaz {
                     for(char carac: fila){
                         if(carac==jugada.charAt(0)){
                             filaValida = true;
-                            System.out.println("fila valida");
                         }
                     }
                     for(int num: columna){
                         if(num==jugada.charAt(1)){
                             columnaValida = true;
-                             System.out.println("columna valida");
 
                         }
                     }
                     if(filaValida && columnaValida){
                         if(jugada.charAt(2) == 'C' || jugada.charAt(2) == 'D' || jugada.charAt(2) == 'I'){
-                            System.out.println("jugada valida");
                             retorno = jugada;
                             valida = false;
                         }
@@ -236,7 +233,7 @@ public class Interfaz {
                         }
                     }
                     if(!filaValida){
-                        System.out.println("(no es CDI)Jugada invalida. Reingrese: ");
+                        System.out.println("Jugada invalida. Reingrese: ");
                     }
                 }
                 else{
