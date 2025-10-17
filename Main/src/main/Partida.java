@@ -11,6 +11,15 @@ public class Partida {
     private Jugador jugadorBlanco;
     private Jugador jugadorNegro;
     private char turno;
+    private boolean mostrarBordes;
+
+    public boolean getMostrarBordes() {
+        return mostrarBordes;
+    }
+
+    public void setMostrarBordes(boolean mostrarBordes) {
+        this.mostrarBordes = mostrarBordes;
+    }
 
     public char getTurno() {
         return turno;
@@ -26,6 +35,20 @@ public class Partida {
 
     public void setTablero(String[][] tablero) {
         this.tablero = tablero;
+    }
+    public void agregarFicha(String ficha, int fila, int col){
+        this.getTablero()[fila][col] = ficha;
+    }
+    public void invertirFicha(int fila, int col){
+        String ficha = this.getTablero()[fila][col];
+        String fichaInv;
+        if(ficha.charAt(0)=='C'){
+            fichaInv = "D";
+        }else{
+            fichaInv = "C";
+        }
+        fichaInv+=ficha.charAt(1);
+        this.agregarFicha(fichaInv, fila, col);
     }
 
     public boolean getPartidaFinalizada() {
@@ -63,28 +86,46 @@ public class Partida {
         }
         //Para que el tablero no comience en null
         this.setTurno('B');
-        
-        
+        this.setMostrarBordes(true);
     }
     
+    //procesa la jugada y agrega la ficha solo si es una jugada de ficha, si es un comando (1 letra) no hace nada, se hace en interfaz
     public void procesarJugada(String jugada){
         //la funcion asume datos validos
-        String ficha = "";
-        ficha += jugada.charAt(2);
-        ficha+= (this.getTurno()+"");
-        int col = (int)jugada.charAt(1)-1;
-        int fila =0;
-        if(jugada.charAt(0)=='A'){
-            fila=0;
-        }else if(jugada.charAt(0)=='B'){
-            fila=1;
+        if (jugada.length() == 3) {
+            String ficha = "";
+            int col = (int)jugada.charAt(1) - 1;
+            int fila = 0;
 
-        }else{
-            fila=2;
+            if (jugada.charAt(0) == 'A') {
+                fila = 0;
+            } else if (jugada.charAt(0) == 'B') {
+                fila = 1;
 
+            } else {
+                fila = 2;
+
+            }
+            if (!(jugada.charAt(2) == 'I')) {
+                ficha += jugada.charAt(2);
+                ficha += (this.getTurno() + "");
+                this.agregarFicha(ficha, fila, col);
+
+            } else {
+                this.invertirFicha(fila, col);
+            }
         }
     }
-  
+    
+    public void cambiarTurno(){
+        if(this.getTurno() == 'B'){
+            this.setTurno('N');
+        }
+        else{
+            this.setTurno('B');
+        }
+    }
+    
     public void mostrarTablero(String[][] tablero, boolean mostrar){
         String[] letras ={"A","B","C"}; 
         
@@ -97,10 +138,11 @@ public class Partida {
             for (int z = 0; z < 3; z++) {
                 String fila;
                 if((z % 2 != 0) && mostrar){
-                    fila = letras[i]+"|";
+                    fila = letras[i];
                 }else{
-                    fila = " |";
+                    fila = " ";
                 }
+                fila+="|";
                 
                 for (int j = 0; j < tablero[0].length; j++) {
                     if ((tablero[i][j].charAt(1) + "").equals("N")) {

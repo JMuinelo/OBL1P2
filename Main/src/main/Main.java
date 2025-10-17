@@ -23,7 +23,7 @@ public class Main {
         Jugador j2 = new Jugador("Nombre2", 18);
         Partida part = new Partida(j1, j2);
         
-        //Interfaz.menuPrincipal(sistema);
+        Interfaz.menuPrincipal(sistema);
         String[][] tablero = new String[3][6];
         for (int i = 0; i < tablero.length; i++) {
             for (int j = 0; j < tablero[0].length; j++) {
@@ -44,9 +44,9 @@ public class Main {
         tablero[2][2] = "CN";
         tablero[2][3] = "DB";
         tablero[2][4] = "DN";
-        
+        /*
         part.setTablero(tablero);
-        part.mostrarTablero(tablero,false);
+        part.mostrarTablero(tablero,true);*/
     }
     
 }
