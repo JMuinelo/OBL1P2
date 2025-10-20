@@ -19,8 +19,11 @@ public class Main {
         
         Sistema sistema = new Sistema();
 
-        Jugador j1 = new Jugador("Nombre", 18);
+        Jugador j1 = new Jugador("Pedro", 18);
+        j1.setPartidasGanadas(2);
         Jugador j2 = new Jugador("Nombre2", 18);
+        sistema.agregarJugador(j1);
+        sistema.agregarJugador(j2);
         Partida part = new Partida(j1, j2);
         
         Interfaz.menuPrincipal(sistema);

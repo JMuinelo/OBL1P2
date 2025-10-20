@@ -89,10 +89,128 @@ public class Partida {
         this.setMostrarBordes(true);
     }
     
+    public String hayGanador(){
+        String ganador = "";
+        boolean hayGanador = false;
+        String[][] tablero = this.getTablero();
+        //vertical
+        for(int j=0; j < tablero[0].length; j=j+2){
+            int cantB = 0;
+            int cantN = 0;
+            int cantBDS = 0; //Blanco Diagonal desde Superior
+            int cantNDS  =0;
+            int cantBDI = 0;
+            int cantNDI = 0;
+            for(int i=0; i < tablero.length; i++){
+                //los circulos primero (blanco)
+                    //Vertical
+                    if(tablero[i][j].charAt(0) == 'C' && tablero[i][j+1].charAt(0) == 'D'){
+                        cantB++;
+                    }
+                    for(int z = 0; z < 3; z++){
+                        //Diagonal Superior
+                        if(tablero[i][i+z].charAt(0) == 'C' && tablero[i][i+z+1].charAt(0) == 'D'){
+                            cantBDS++;                            
+                        }
+                        //Diagonal Inferior
+                        if(tablero[2-i][i+z].charAt(0) == 'C' && tablero[2-i][i+z+1].charAt(0) == 'D'){
+                            cantBDI++;
+                        }
+                    }
+                    if(tablero[i][j].charAt(0) == 'D' && tablero[i][j+1].charAt(0) == 'C'){
+                        cantN++;
+                    }
+                    for(int z = 0; z < 3; z++){
+                        if(tablero[i][i+z].charAt(0) == 'D' && tablero[i][i+z+1].charAt(0) == 'C'){
+                            cantNDS++;
+
+                        }
+                        if(tablero[2-i][i+z].charAt(0) == 'D' && tablero[2-i][i+z+1].charAt(0) == 'C'){
+                            cantNDI++;
+                        }
+                    }
+                
+            }
+            boolean resultadoBlanco = cantB == 3 || cantBDS == 3 || cantBDI == 3;
+            boolean resultadoNegro = cantN == 3 || cantNDS == 3 || cantNDI == 3;
+            if(resultadoBlanco && resultadoNegro){
+                if(this.getTurno() == 'B'){
+                    ganador = "Blanco";
+                    sumar1NB('B');
+                }
+                else{
+                    ganador = "Negro";
+                    sumar1NB('N');
+                }
+                hayGanador = true;
+            }
+            
+            else{
+                if(resultadoBlanco){
+                    ganador = "Blanco";
+                    hayGanador = true;
+                    sumar1NB('B');
+                }
+                if(resultadoNegro){
+                    ganador = "Negro";
+                    hayGanador = true;
+                    sumar1NB('N');
+                }
+            }
+        }
+        //Si no hubo ganador, recorre de forma horizontal
+        if(!hayGanador){
+            int cantB = 0;
+            int cantN = 0;
+                for(int i = 0 ; i < tablero.length; i++){
+                    for(int j=0; j < tablero[0].length; j=j+2){
+                        if(tablero[i][j].charAt(0) == 'C' && tablero[i][j+1].charAt(0) == 'D'){
+                            cantB++;
+                        }
+                        if(tablero[i][j].charAt(0) == 'D' && tablero[i][j+1].charAt(0) == 'C'){
+                            cantN++;
+                        }
+                    }
+                }
+            if(cantB == 3 && cantN == 3){
+                if(this.getTurno() == 'B'){
+                    ganador = "Blanco";
+                    hayGanador = true;
+                    sumar1NB('B');
+                }
+            }
+            else{
+                if(cantB == 3){
+                    ganador = "Blanco";
+                    hayGanador = true;
+                    sumar1NB('B');
+                }
+                if(cantN == 3){
+                    ganador = "Negro";
+                    hayGanador = true;
+                    sumar1NB('N');
+                }
+            }
+        }
+        return ganador;
+    }
+    
+    public void sumar1NB(char ganador){
+        this.jugadorBlanco.setPartidasJugadas(this.jugadorBlanco.getPartidasGanadas()+1);
+        this.jugadorNegro.setPartidasJugadas(this.jugadorNegro.getPartidasJugadas()+1);
+        if(ganador == 'B'){
+            this.jugadorBlanco.setPartidasGanadas(this.jugadorBlanco.getPartidasGanadas()+1);
+        }
+        else{
+            this.jugadorNegro.setPartidasGanadas(this.jugadorNegro.getPartidasGanadas()+1);
+        }
+    }
+    
     //procesa la jugada y agrega la ficha solo si es una jugada de ficha, si es un comando (1 letra) no hace nada, se hace en interfaz
     public void procesarJugada(String jugada){
         //la funcion asume datos validos
         if (jugada.length() == 3) {
+            System.out.println("entro al length");
             String ficha = "";
             //funcion random
             int col = Character.getNumericValue(jugada.charAt(1)) - 1;

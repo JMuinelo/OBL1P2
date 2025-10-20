@@ -39,10 +39,11 @@ public class Interfaz {
                         System.out.println(sistema.getListaJugadores());
                         break;
                 case 2:
-                        comenzarPartida(sistema);
+                        comenzarPartida(sistema, false);
                         break;
                 case 3:
-                
+                        comenzarPartida(sistema, true);
+                        break;
                 case 4:
                         mostrarRanking(sistema);
                 case 5:
@@ -76,7 +77,7 @@ public class Interfaz {
         Collections.sort(sistema.getListaJugadores(),
                 new Comparator<Jugador>(){
                     public int compare(Jugador j1, Jugador j2){
-                        return j1.getPartidasGanadas()-j2.getPartidasGanadas();
+                        return j2.getPartidasGanadas()-j1.getPartidasGanadas();
                     }
                 }
                 );
@@ -126,17 +127,45 @@ public class Interfaz {
         sistema.setPartidaActual(new Partida(sistema.getListaJugadores().get(jug1), sistema.getListaJugadores().get(jug2)));
     }
     
-    public static void comenzarPartida(Sistema sistema){
+    public static void agregarSecuencias(Sistema sistema){
+        Scanner in = new Scanner(System.in);
+        System.out.println("Ingrese la partida: ");
+        String partida = in.nextLine().toUpperCase();
+        for(int i=0; i < partida.length(); i=i+4){
+            sistema.getPartidaActual().procesarJugada(partida.substring(i, i+3).trim());
+            sistema.getPartidaActual().cambiarTurno();
+        }
+    }
+    
+    public static void comenzarPartida(Sistema sistema, boolean continuaPartida){
         if(sistema.getListaJugadores().size() > 1){
             seleccionarJugadores(sistema);
+            if(continuaPartida){
+                 agregarSecuencias(sistema);
+            }
             while(!sistema.getPartidaActual().getPartidaFinalizada()){
-                System.out.println("TURNO DE: "+sistema.getPartidaActual().getTurno());
+                String turno = "TURNO DE: " + sistema.getPartidaActual().getTurno() + " - ";
+                if(sistema.getPartidaActual().getTurno() == 'B'){
+                    turno += " " + sistema.getPartidaActual().getJugadorBlanco().getNombre();
+                }
+                else{
+                    turno += sistema.getPartidaActual().getJugadorNegro().getNombre();
+                }
+                System.out.println(turno);
                 sistema.getPartidaActual().mostrarTablero(sistema.getPartidaActual().getTablero(), sistema.getPartidaActual().getMostrarBordes());
                 String jugada = pedirJugada(sistema);
                 sistema.getPartidaActual().procesarJugada(jugada);
                 if(jugada.length() == 3){
+                    String jugador = sistema.getPartidaActual().hayGanador();
+                    if(!jugador.equals("")){
+                        sistema.getPartidaActual().setPartidaFinalizada(true);
+                        System.out.println("\n***** GANADOR: "+jugador+" *****");
+                        //prueba
+                        //sistema.getPartidaActual().mostrarTablero(sistema.getPartidaActual().getTablero(), sistema.getPartidaActual().getMostrarBordes());
+                    }
                     sistema.getPartidaActual().cambiarTurno();
                 }
+                
             }
         }else{
             System.out.println("No hay suficientes jugadores para comenzar una nueva partida.");
@@ -224,15 +253,27 @@ public class Interfaz {
                         }
                     }
                     if(filaValida && columnaValida){
-                        if(jugada.charAt(2) == 'C' || jugada.charAt(2) == 'D' || jugada.charAt(2) == 'I'){
+                        if(jugada.charAt(2) == 'C' || jugada.charAt(2) == 'D'){
                             retorno = jugada;
                             valida = false;
                         }
                         else{
-                            filaValida = false;
+                            //revisa si la pieza es invertible para el jugador actual
+                            if(jugada.charAt(2) == 'I'){
+                                if((sistema.getPartidaActual().getTurno()+"" ).equals(sistema.getPartidaActual().getTablero()[((int)jugada.charAt(0))-65][Character.getNumericValue(jugada.charAt(1))])){
+                                    valida = false;
+                                    retorno = jugada;
+                                }
+                                else{
+                                    System.out.println("Solo se pueden invertir las fichas de tu propio color");
+                                }
+                            }
+                            else{
+                                 filaValida = false;
+                            }
                         }
                     }
-                    if(!filaValida){
+                    if(!filaValida || !columnaValida){
                         System.out.println("Jugada invalida. Reingrese: ");
                     }
                 }
