@@ -1,10 +1,5 @@
 package main;
 
-/**
- *
- * 
- * @author Toto
- */
 public class Partida {
     private String[][]tablero; //Celdas del tipo BD, NC
     private boolean partidaFinalizada;
@@ -89,10 +84,83 @@ public class Partida {
         this.setMostrarBordes(true);
     }
     
-    public String hayGanador(){
+    public String hayJugadaGanadora(){
+        String jugadaGanadora = "";
+        int fila = 0;
+        boolean hayGanadorC = false;
+        boolean hayGanadorD = false;
+        boolean hayGanadorI = false;
+
+        String[][] tablero = this.getTablero();
+        //tablero artificial
+        for(int i = 0; i < tablero.length && hayGanadorC && hayGanadorD && hayGanadorI; i++){
+            for(int j=0; j < tablero[0].length; j++){
+                String fichaActual = tablero[i][j];
+                
+                if(this.getTurno() == 'B'){
+                    if(fichaActual.length() == 0){
+                        tablero[i][j] = "CB";
+                        if(hayGanador(tablero).length() > 0){
+                            hayGanadorC = true;
+                            jugadaGanadora = "jugada ganadora: CB";
+                            fila = i;
+                        }
+                        tablero[i][j] = "jugada ganadora: DB";
+                        if(hayGanador(tablero).length() > 0){
+                            hayGanadorD = true;
+                            fila = i;
+                        }
+                    }
+                    else{
+                        if(fichaActual.charAt(0) == 'C'){
+                            tablero[i][j] = "jugada ganadora: DB";
+                            fila = i;
+                        }
+                        else{
+                            tablero[i][j] = "jugada ganadora: CB";
+                            fila = i;
+                        }
+                        if(hayGanador(tablero).length() > 0){
+                            hayGanadorI = true;
+                        }
+                    }
+                }
+                else{
+                    if(fichaActual.length() == 0){
+                        tablero[i][j] = "CB";
+                        if(hayGanador(tablero).length() > 0){
+                            hayGanadorC = true;
+                            fila = i;
+                        }
+                        tablero[i][j] = "DB";
+                        if(hayGanador(tablero).length() > 0){
+                            hayGanadorD = true;
+                            fila = i;
+                        }
+                    }
+                    else{
+                        if(fichaActual.charAt(0) == 'C'){
+                            tablero[i][j] = "DB";
+                            fila = i;
+                        }
+                        else{
+                            tablero[i][j] = "CB";
+                            fila = i;
+                        }
+                        if(hayGanador(tablero).length() > 0){
+                            hayGanadorI = true;
+                        }
+                    }
+                }
+            }
+        }
+        return jugadaGanadora;
+    }
+    
+    //Recibe un tablero
+    public String hayGanador(String[][] tablero){
         String ganador = "";
         boolean hayGanador = false;
-        String[][] tablero = this.getTablero();
         //vertical
         for(int j=0; j < tablero[0].length; j=j+2){
             int cantB = 0;
@@ -129,7 +197,6 @@ public class Partida {
                             cantNDI++;
                         }
                     }
-                
             }
             boolean resultadoBlanco = cantB == 3 || cantBDS == 3 || cantBDI == 3;
             boolean resultadoNegro = cantN == 3 || cantNDS == 3 || cantNDI == 3;
@@ -223,7 +290,6 @@ public class Partida {
 
             } else {
                 fila = 2;
-
             }
             if (jugada.charAt(2) != 'I') {
                 ficha += jugada.charAt(2);
@@ -307,63 +373,4 @@ public class Partida {
         }
 
     }
-    
-    
-    /*
-        String[][] tableroStr = {
-    {" "," "," ","1"," "," ","2"," "," ","3"," "," ","4"," "," ","5"," "," ","6"," "},
-    {" ","+","-","-","+","-","-","+","-","-","+","-","-","+","-","-","+","-","-","+"},
-    {" ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"},
-    {"A","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"},
-    {" ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"},
-    {" ","+","-","-","+","-","-","+","-","-","+","-","-","+","-","-","+","-","-","+"},
-    {" ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"},
-    {"B","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"},
-    {" ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"},
-    {" ","+","-","-","+","-","-","+","-","-","+","-","-","+","-","-","+","-","-","+"},
-    {" ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"},
-    {"C","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"},
-    {" ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"," "," ","|"},
-    {" ","+","-","-","+","-","-","+","-","-","+","-","-","+","-","-","+","-","-","+"},
-    }; */
-    
-    
-    /*
-    public void sacarBordes(){
-        String[] caracteres = {"A","B","C","1","2","3","4","5","6"};
-        
-        for(int i=0;i<caracteres.length;i++){
-            for(int j=0;j<this.getTableroStr()[0].length;j++){
-                if(caracteres[i] == this.getTableroStr()[0][j]){
-                    this.getTableroStr()[0][j] = " ";
-                }
-            }
-            
-        }
-        for(int i=0;i<caracteres.length;i++){
-            for(int j=0;j<this.getTableroStr().length;j++){
-                if(caracteres[i] == this.getTableroStr()[j][0]){
-                    this.getTableroStr()[j][0] = " ";
-                }
-            }
-        }
-    }
-    
-    public void incluirBordes(){
-      int[] fila = {3,7,11};
-      
-      String[] dato = {"A","B","C"};
-     
-      int[] colNum = {3,6,9,12,15,18};
-      
-      String[] datoNum = {"1","2","3","4","5","6"};
-      
-      for(int i=0;i<fila.length;i++){
-          this.getTableroStr()[fila[i]][0]=dato[i];
-      }
-      
-      for(int j=0;j<colNum.length;j++){
-          this.getTableroStr()[0][colNum[j]]=datoNum[j];
-      }
-    }*/
 }   
