@@ -1,6 +1,7 @@
 
 package main;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.InputMismatchException;
@@ -156,7 +157,7 @@ public class Interfaz {
                 String jugada = pedirJugada(sistema);
                 sistema.getPartidaActual().procesarJugada(jugada);
                 if(jugada.length() == 3){
-                    String jugador = sistema.getPartidaActual().hayGanador();
+                    String jugador = sistema.getPartidaActual().hayGanador(sistema.getPartidaActual().getTablero(), true, true);
                     if(!jugador.equals("")){
                         sistema.getPartidaActual().setPartidaFinalizada(true);
                         System.out.println("\n***** GANADOR: "+jugador+" *****");
@@ -212,26 +213,34 @@ public class Interfaz {
             if(jugada.length()==1){
                 switch(jugada){
                     case "X":
+                        
+                        
                         valida = false;
                     break;
                     
                     case "B":
                         sistema.getPartidaActual().setMostrarBordes(true);
                         valida = false;
-                    break;
-                    
+                        break;
                     case "T":
+                        
+                        
                         valida = false;
-                    break;
+                        break;
                     
                     case "H":
+                        System.out.println("Entro el H");
+                        boolean controlBlanco = true;
+                        if(sistema.getPartidaActual().getTurno() == 'N'){
+                            controlBlanco = false;
+                        }
+                        System.out.println(sistema.getPartidaActual().hayJugadaGanadora(controlBlanco));
                         valida = false;
-                    break;
-                    
+                        break;
                     case "N":
                         sistema.getPartidaActual().setMostrarBordes(false);
                         valida = false;
-                    break;
+                        break;
                     
                     default: 
                         System.out.println("Opcion invalida, reingrese:");
@@ -241,16 +250,24 @@ public class Interfaz {
                 if(jugada.length()==3){
                     boolean filaValida=false;
                     boolean columnaValida=false;
-                    for(char carac: fila){
-                        if(carac==jugada.charAt(0)){
+                    int columnaValor = 0;
+                    int filaValor = 0;
+                    for(int i = 0; i < fila.length && !filaValida; i++){
+                        if(fila[i] == jugada.charAt(0)){
                             filaValida = true;
                         }
-                    }
-                    for(int num: columna){
-                        if(num==jugada.charAt(1)){
-                            columnaValida = true;
-
+                        else{
+                            filaValor++;
                         }
+                    }
+                    for(int i = 0; i < columna.length && !columnaValida; i++){
+                        if(columna[i] == jugada.charAt(1)){
+                            columnaValida = true;
+                        }
+                        else{
+                            columnaValor++;
+                        }
+                        
                     }
                     if(filaValida && columnaValida){
                         if(jugada.charAt(2) == 'C' || jugada.charAt(2) == 'D'){
@@ -260,7 +277,8 @@ public class Interfaz {
                         else{
                             //revisa si la pieza es invertible para el jugador actual
                             if(jugada.charAt(2) == 'I'){
-                                if((sistema.getPartidaActual().getTurno()+"" ).equals(sistema.getPartidaActual().getTablero()[((int)jugada.charAt(0))-65][Character.getNumericValue(jugada.charAt(1))])){
+                                if(sistema.getPartidaActual().getTablero()[filaValor][columnaValor].charAt(1) == sistema.getPartidaActual().getTurno()){
+                                //if((sistema.getPartidaActual().getTurno()+"" ).equals(sistema.getPartidaActual().getTablero()[((int)jugada.charAt(0))-65][Character.getNumericValue(jugada.charAt(1))])){
                                     valida = false;
                                     retorno = jugada;
                                 }
