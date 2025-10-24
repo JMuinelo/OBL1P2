@@ -1,7 +1,7 @@
 package main;
 
 public class Partida {
-    private String[][]tablero; //Celdas del tipo BD, NC
+    private String[][]tablero; //Celdas del tipo DB, CN
     private boolean partidaFinalizada;
     private Jugador jugadorBlanco;
     private Jugador jugadorNegro;
@@ -87,11 +87,11 @@ public class Partida {
     public String hayJugadaGanadora(boolean controlBlanco){
         String jugadaGanadora = "";
         //Segun el estado de controlBlanco, controla Circulo o Equis
-        char c  = 'C';
-        char d  = 'D';
+        char primero  = 'C';
+        char segundo  = 'D';
         if(!controlBlanco){
-            c  = 'D';
-            d  = 'C';
+            primero  = 'D';
+            segundo  = 'C';
         }
         int fila = 0;
         int columna = 0; 
@@ -102,18 +102,15 @@ public class Partida {
                 String fichaActual = tablero[i][j];
                 fila = i;
                 columna = j;
-                System.out.println("["+i+","+j+"]"+"Recorriendo ficha: "+fichaActual + " length:"+fichaActual.length());
                 if(fichaActual.equals("  ")){
-                    tablero[i][j] = c+"B";
+                    tablero[i][j] = primero+"B";
                     //Como siempre analiza ganador por turno, uno es true, otro false
-                    System.out.println("1) Tablero en "+c+"B :"+tablero[i][j]);
                     if(hayGanador(tablero, controlBlanco, !controlBlanco).length() > 0){
-                        jugadaGanadora = "jugada ganadora: "+c + " en ";
+                        jugadaGanadora = "jugada ganadora: "+primero + " en ";
                     }
-                    tablero[i][j] = d+"B";
-                    System.out.println("2) Tablero en "+d+"B :"+tablero[i][j]);
+                    tablero[i][j] = segundo+"B";
                     if(hayGanador(tablero, controlBlanco, !controlBlanco).length() > 0){
-                       jugadaGanadora = "jugada ganadora: "+d + " en ";
+                       jugadaGanadora = "jugada ganadora: "+ segundo + " en ";
                     }
                 }
                 else{
@@ -126,7 +123,6 @@ public class Partida {
                     else{
                         tablero[i][j] = "C"+fichaActual.charAt(1);
                     }
-                    System.out.println("(Invertido)Tablero en "+aux+"B :"+tablero[i][j]);
                     if(hayGanador(tablero, controlBlanco, !controlBlanco).length() > 0){
                         jugadaGanadora = "jugada ganadora: "+aux + " en ";
                     }
@@ -151,57 +147,37 @@ public class Partida {
         return jugadaGanadora;
     }
     
-    //Recibe un tablero
     public String hayGanador(String[][] tablero, boolean controlBlanco, boolean controlNegro){
+        
         String ganador = "";
         boolean hayGanador = false;
         //vertical
         for(int j=0; j < tablero[0].length; j=j+2){
             int cantB = 0;
             int cantN = 0;
-            int cantBDS = 0; //Blanco Diagonal desde Superior
-            int cantNDS  =0;
-            int cantBDI = 0;
-            int cantNDI = 0;
-            int z = 0;
+            boolean diagonalNegro=false;
+            boolean diagonalBlanco=false;
+            
             for(int i=0; i < tablero.length; i++){
                 //los circulos primero (blanco)
                     //Vertical
                     if(controlBlanco){
                         if(tablero[i][j].charAt(0) == 'C' && tablero[i][j+1].charAt(0) == 'D'){
                             cantB++;
-                            System.out.println("Entro a Vertical");
                         }
-                        //Diagonal Superior
-                        if(tablero[i][i+z].charAt(0) == 'C' && tablero[i][i+z+1].charAt(0) == 'D'){
-                            cantBDS++;   
-                            System.out.println("Circulo - Entro a Diagonal Sup");
-                        }
-                        //Diagonal Inferior
-                        if(tablero[2-i][i+z].charAt(0) == 'C' && tablero[2-i][i+z+1].charAt(0) == 'D'){
-                            cantBDI++;
-                            System.out.println("Circulo - Entro a Diagonal Inf");
-                        }
+                        diagonalBlanco = enDiagonal(true);
+                        
                     }
-                    if(controlNegro){
-                            if(tablero[i][j].charAt(0) == 'D' && tablero[i][j+1].charAt(0) == 'C'){
-                                cantN++;
-                            }
-                            if(tablero[i][i+z].charAt(0) == 'D' && tablero[i][i+z+1].charAt(0) == 'C'){
-                                cantNDS++;
-                               System.out.println("Equis - Entro a Diagonal Sup");
-                            }
-                            if(tablero[2-i][i+z].charAt(0) == 'D' && tablero[2-i][i+z+1].charAt(0) == 'C'){
-                               cantNDI++;
-                               System.out.println("Equis - Entro a Diagonal Inf");
-                            }
-                    }
-                    z++;
+                if(controlNegro){
+                   if(tablero[i][j].charAt(0) == 'D' && tablero[i][j+1].charAt(0) == 'C'){
+                        cantN++;
+                   }
+                   diagonalNegro = enDiagonal(false);
+                }
             }
-            System.out.println((j)+"Blanco: cantB:"+cantB+"|cantBDS:"+cantBDS+"|cantBDI:"+cantBDI);
-            System.out.println((j)+"Negro: cantN:"+cantN+"|cantNDS:"+cantNDS+"|cantNDI:"+cantNDI);
-            boolean resultadoBlanco = cantB == 3 || cantBDS == 3 || cantBDI == 3;
-            boolean resultadoNegro = cantN == 3 || cantNDS == 3 || cantNDI == 3;
+            
+            boolean resultadoBlanco = cantB == 3 ||diagonalBlanco;
+            boolean resultadoNegro = cantN == 3 || diagonalNegro;
             if(resultadoBlanco && resultadoNegro){
                 if(this.getTurno() == 'B'){
                     ganador = "Blanco";
@@ -228,12 +204,11 @@ public class Partida {
         }
         //Si no hubo ganador, recorre de forma horizontal
         if(!hayGanador){
-            System.out.println("No hubo ganador, verifica horizontalmente");
+            
             int cantB = 0;
             int cantN = 0;    
                 for(int i = 0 ; i < tablero.length; i++){
-                    cantB = 0;
-                    cantN = 0;
+                    
                     for(int j=0; j < tablero[0].length; j=j+2){
                         if(controlBlanco){
                             if(tablero[i][j].charAt(0) == 'C' && tablero[i][j+1].charAt(0) == 'D'){
@@ -271,8 +246,9 @@ public class Partida {
     }
     
     public void sumar1NB(char ganador){
-        this.jugadorBlanco.setPartidasJugadas(this.jugadorBlanco.getPartidasGanadas()+1);
+        this.jugadorBlanco.setPartidasJugadas(this.jugadorBlanco.getPartidasJugadas()+1);
         this.jugadorNegro.setPartidasJugadas(this.jugadorNegro.getPartidasJugadas()+1);
+        
         if(ganador == 'B'){
             this.jugadorBlanco.setPartidasGanadas(this.jugadorBlanco.getPartidasGanadas()+1);
         }
@@ -380,4 +356,74 @@ public class Partida {
         }
 
     }
+    
+    public boolean enDiagonal(boolean controlBlanco){
+        boolean hayDiagonal=false;
+        String[][] tablero = this.getTablero();
+        
+        int cantBDS = 0; //Blanco Diagonal desde Superior
+        int cantNDS  =0;
+        int cantBDI = 0;
+        int cantNDI = 0;
+        
+        
+        if(controlBlanco){
+            //Blanca, superior
+            for(int z=0; z<3&&cantBDS!=3;z++){
+                int j=0;
+                for(int i=0;i<tablero.length; i++,j++){
+                    if(tablero[i][j+z].charAt(0)  == 'C' && tablero[i][j+z+1].charAt(0)  == 'D'){
+                        cantBDS++;
+                    }
+                    if(cantBDS==3){
+                        hayDiagonal=true;  
+                    }
+                }
+            }
+            //Blanca Inferior
+            for(int z=0; z<3&&cantBDI!=3;z++){
+                int j=0;
+                for(int i=0;i<tablero.length; i++,j++){
+                    if(tablero[2-i][j+z].charAt(0)  == 'C' && tablero[2-i][j+z+1].charAt(0)  == 'D'){
+                        cantBDI++;
+                    }
+                    if(cantBDI==3){
+                        hayDiagonal=true;  
+                    }
+                }
+            }
+            
+            
+        }else{
+            //Negra Superior
+            for(int z=0; z<3&&cantNDS!=3;z++){
+                int j=0;
+                for(int i=0;i<tablero.length; i++,j++){
+                    if(tablero[i][j+z].charAt(0)  == 'D' && tablero[i][j+z+1].charAt(0)  == 'C'){
+                        cantNDS++;
+                    }
+                    if(cantNDS==3){
+                        hayDiagonal=true;  
+                    }
+                }
+            }
+            
+            //Negra Inferior
+            for(int z=0; z<3&&cantNDI!=3;z++){
+                int j=0;
+                for(int i=0;i<tablero.length; i++,j++){
+                    if(tablero[2-i][j+z].charAt(0)  == 'D' && tablero[2-i][j+z+1].charAt(0)  == 'C'){
+                        cantNDI++;
+                    }
+                    if(cantNDI==3){
+                        hayDiagonal=true;  
+                    }
+                }
+            }
+        }
+        
+        
+        return hayDiagonal;
+    }
+    
 }   

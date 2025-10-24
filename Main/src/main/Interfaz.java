@@ -229,7 +229,6 @@ public class Interfaz {
                         break;
                     
                     case "H":
-                        System.out.println("Entro el H");
                         boolean controlBlanco = true;
                         if(sistema.getPartidaActual().getTurno() == 'N'){
                             controlBlanco = false;
@@ -244,10 +243,12 @@ public class Interfaz {
                     
                     default: 
                         System.out.println("Opcion invalida, reingrese:");
-                        
                 }
             }else{
                 if(jugada.length()==3){
+                    int columnaJugada= Character.getNumericValue(jugada.charAt(1))-1; //-1 tiene en cuenta que la matriz esta indexada en 0
+                    int filaJugada= Character.getNumericValue(jugada.charAt(0))-10; //-10 por la conversion a hexadecimal
+                    
                     boolean filaValida=false;
                     boolean columnaValida=false;
                     int columnaValor = 0;
@@ -271,14 +272,20 @@ public class Interfaz {
                     }
                     if(filaValida && columnaValida){
                         if(jugada.charAt(2) == 'C' || jugada.charAt(2) == 'D'){
-                            retorno = jugada;
-                            valida = false;
+                            
+                            if(sistema.getPartidaActual().getTablero()[filaJugada][columnaJugada].equals("  ")){
+                                //si esta vacio permito agregar la ficha
+                                retorno = jugada;
+                                valida = false;
+                            }else{
+                                System.out.println("No puedes agregar una ficha encima de otra, por favor reingresa: ");
+                            }
+                            
                         }
                         else{
                             //revisa si la pieza es invertible para el jugador actual
                             if(jugada.charAt(2) == 'I'){
                                 if(sistema.getPartidaActual().getTablero()[filaValor][columnaValor].charAt(1) == sistema.getPartidaActual().getTurno()){
-                                //if((sistema.getPartidaActual().getTurno()+"" ).equals(sistema.getPartidaActual().getTablero()[((int)jugada.charAt(0))-65][Character.getNumericValue(jugada.charAt(1))])){
                                     valida = false;
                                     retorno = jugada;
                                 }
