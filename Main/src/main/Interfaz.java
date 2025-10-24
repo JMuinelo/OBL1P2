@@ -18,6 +18,8 @@ public class Interfaz {
         ;
         Scanner in = new Scanner(System.in);
         System.out.println("Bienvenido al Medio Tateti!");
+        System.out.println("Autores: Dylan Escobar - 357026 & Juan Muinelo 350499\n");
+        
          
         
         
@@ -25,7 +27,7 @@ public class Interfaz {
         
         
         while(opcion!=5){
-            System.out.println("Elija una opcion para continuar:");
+            System.out.println("Elija una opcion para continuar:\n");
             System.out.println("1. Ingresar un Jugador");
             System.out.println("2. Comenzar Partida");
             System.out.println("3. Continuacion de Partida");
@@ -37,7 +39,6 @@ public class Interfaz {
             switch (opcion){
                 case 1:
                         ingresarJugadorInterfaz(sistema);
-                        System.out.println(sistema.getListaJugadores());
                         break;
                 case 2:
                         comenzarPartida(sistema, false);
@@ -126,6 +127,7 @@ public class Interfaz {
             }
         }//En este punto jug1 y jug2 tienen los valores de los indices del respectivo jugador en el arraylist de jugadores
         sistema.setPartidaActual(new Partida(sistema.getListaJugadores().get(jug1), sistema.getListaJugadores().get(jug2)));
+        //sistema.getPartidaActual().setFichasGanadoras(new int[] {0,0,0,1,0,2,0,3,0,4,0,5});
     }
     
     public static void agregarSecuencias(Sistema sistema){
@@ -153,7 +155,7 @@ public class Interfaz {
                     turno += sistema.getPartidaActual().getJugadorNegro().getNombre();
                 }
                 System.out.println(turno);
-                sistema.getPartidaActual().mostrarTablero(sistema.getPartidaActual().getTablero(), sistema.getPartidaActual().getMostrarBordes());
+                sistema.getPartidaActual().mostrarTablero(sistema.getPartidaActual().getTablero(), sistema.getPartidaActual().getMostrarBordes(),false);
                 String jugada = pedirJugada(sistema);
                 sistema.getPartidaActual().procesarJugada(jugada);
                 if(jugada.length() == 3){
@@ -161,6 +163,8 @@ public class Interfaz {
                     if(!jugador.equals("")){
                         sistema.getPartidaActual().setPartidaFinalizada(true);
                         System.out.println("\n***** GANADOR: "+jugador+" *****");
+                        sistema.getPartidaActual().mostrarTablero(sistema.getPartidaActual().getTablero(), sistema.getPartidaActual().getMostrarBordes(),true);
+                        
                         //prueba
                         //sistema.getPartidaActual().mostrarTablero(sistema.getPartidaActual().getTablero(), sistema.getPartidaActual().getMostrarBordes());
                     }
@@ -183,18 +187,20 @@ public class Interfaz {
         int numero=0;
         while(!valido){
             try{
-            System.out.println(texto);
-            numero = in.nextInt();
-            in.nextLine();
-            if(numero >= min && numero <= max){
-                valido = true;
-            }
-            else{
-                System.out.println("Valor Fuera de Rango"+"("+min+"-"+max+"), reingrese:");
-                //numero = in.nextInt();
-            }
+                System.out.println(texto);
+                numero = in.nextInt();
+                
+
+                if(numero >= min && numero <= max){
+                    valido = true;
+                }
+                else{
+                    System.out.println("Valor Fuera de Rango"+"("+min+"-"+max+"), reingrese:");
+                    //numero = in.nextInt();
+                }
             }catch(InputMismatchException e){
                 System.out.println("Ingrese solo numeros");
+                in.nextLine();
             }
         }
         return numero;

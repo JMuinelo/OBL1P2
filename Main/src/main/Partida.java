@@ -1,5 +1,7 @@
 package main;
 
+import java.util.Arrays;
+
 public class Partida {
     private String[][]tablero; //Celdas del tipo DB, CN
     private boolean partidaFinalizada;
@@ -7,7 +9,20 @@ public class Partida {
     private Jugador jugadorNegro;
     private char turno;
     private boolean mostrarBordes;
+    private int[] fichasGanadoras;
 
+    public int[] getFichasGanadoras() {
+        return fichasGanadoras;
+    }
+    //Fila, Columna
+    public void agregarFichaGanadora(int fichaGanadora, int i) {
+        this.fichasGanadoras[i] = fichaGanadora;
+    }
+    
+    public void setFichasGanadoras(int[] fichasGanadoras) {
+        this.fichasGanadoras = fichasGanadoras;
+    }
+    
     public boolean getMostrarBordes() {
         return mostrarBordes;
     }
@@ -82,6 +97,7 @@ public class Partida {
         //Para que el tablero no comience en null
         this.setTurno('B');
         this.setMostrarBordes(true);
+        fichasGanadoras = new int[12];
     }
     
     public String hayJugadaGanadora(boolean controlBlanco){
@@ -152,30 +168,56 @@ public class Partida {
         String ganador = "";
         boolean hayGanador = false;
         //vertical
-        for(int j=0; j < tablero[0].length; j=j+2){
-            int cantB = 0;
-            int cantN = 0;
+        int[] posicionesGanadorasB = new int[12];
+        int[] posicionesGanadorasN = new int[12];
+        int cantB = 0;
+        int cantN = 0;
+        int contadorArrayB=0;
+        int contadorArrayN=0;
+        for(int j=0; j < tablero[0].length&&(cantB!=3&&cantN!=3); j=j+2){
+            cantB = 0;
+            cantN = 0;
             boolean diagonalNegro=false;
             boolean diagonalBlanco=false;
-            
+            /*int contadorArrayB=0;
+            int contadorArrayN=0;*/
+            for(int i = 0; i < posicionesGanadorasB.length;i++){
+                posicionesGanadorasB[i] = 0;
+                posicionesGanadorasN[i] = 0;
+            }
             for(int i=0; i < tablero.length; i++){
-                //los circulos primero (blanco)
+                //System.out.println(Arrays.toString(posicionesGanadorasB));
+                //VERTICAL
                     //Vertical
                     if(controlBlanco){
                         if(tablero[i][j].charAt(0) == 'C' && tablero[i][j+1].charAt(0) == 'D'){
                             cantB++;
+                            posicionesGanadorasB[contadorArrayB]=i;
+                            posicionesGanadorasB[contadorArrayB+1]=j;
+                            posicionesGanadorasB[contadorArrayB+2]=i;
+                            posicionesGanadorasB[contadorArrayB+3]=j+1;
+                            contadorArrayB+=4;
+                            
                         }
-                        diagonalBlanco = enDiagonal(true);
-                        
                     }
                 if(controlNegro){
                    if(tablero[i][j].charAt(0) == 'D' && tablero[i][j+1].charAt(0) == 'C'){
                         cantN++;
+                        posicionesGanadorasN[contadorArrayN]=i;
+                        posicionesGanadorasN[contadorArrayN+1]=j;
+                        posicionesGanadorasN[contadorArrayN+2]=i;
+                        posicionesGanadorasN[contadorArrayN+3]=j+1;
+                        contadorArrayN+=4;
                    }
-                   diagonalNegro = enDiagonal(false);
                 }
             }
-            
+            if(controlBlanco){
+                diagonalBlanco = enDiagonal(true);
+            }
+            if(controlNegro){
+                diagonalNegro = enDiagonal(false);
+
+            }
             boolean resultadoBlanco = cantB == 3 ||diagonalBlanco;
             boolean resultadoNegro = cantN == 3 || diagonalNegro;
             if(resultadoBlanco && resultadoNegro){
@@ -204,20 +246,34 @@ public class Partida {
         }
         //Si no hubo ganador, recorre de forma horizontal
         if(!hayGanador){
-            
-            int cantB = 0;
-            int cantN = 0;    
-                for(int i = 0 ; i < tablero.length; i++){
-                    
+                for(int i = 0 ; i < tablero.length &&(cantB!=3&&cantN!=3); i++){
+                    contadorArrayB=0;
+                    contadorArrayN=0;
+                    cantB = 0;
+                    cantN = 0;   
+                    for(int f = 0; f < posicionesGanadorasB.length;f++){
+                        posicionesGanadorasB[f] = 0;
+                        posicionesGanadorasN[f] = 0;
+                    }
                     for(int j=0; j < tablero[0].length; j=j+2){
                         if(controlBlanco){
                             if(tablero[i][j].charAt(0) == 'C' && tablero[i][j+1].charAt(0) == 'D'){
                                 cantB++;
+                                posicionesGanadorasB[contadorArrayB]=i;
+                                posicionesGanadorasB[contadorArrayB+1]=j;
+                                posicionesGanadorasB[contadorArrayB+2]=i;
+                                posicionesGanadorasB[contadorArrayB+3]=j+1;
+                                contadorArrayB+=4;
                             }
                         }
                         if(controlNegro){
                             if(tablero[i][j].charAt(0) == 'D' && tablero[i][j+1].charAt(0) == 'C'){
                                 cantN++;
+                                posicionesGanadorasN[contadorArrayN]=i;
+                                posicionesGanadorasN[contadorArrayN+1]=j;
+                                posicionesGanadorasN[contadorArrayN+2]=i;
+                                posicionesGanadorasN[contadorArrayN+3]=j+1;
+                                contadorArrayN+=4;
                             }
                         }
                     }
@@ -227,18 +283,33 @@ public class Partida {
                     ganador = "Blanco";
                     hayGanador = true;
                     sumar1NB('B');
+                    this.setFichasGanadoras(posicionesGanadorasB);
+                }
+                else{
+                    ganador = "Negro";
+                    hayGanador = true;
+                    sumar1NB('N');
+                    this.setFichasGanadoras(posicionesGanadorasN);
                 }
             }
             else{
                 if(cantB == 3){
+                    
                     ganador = "Blanco";
                     hayGanador = true;
                     sumar1NB('B');
+                    this.setFichasGanadoras(posicionesGanadorasB);
+                    
+
                 }
                 if(cantN == 3){
                     ganador = "Negro";
                     hayGanador = true;
                     sumar1NB('N');
+                    this.setFichasGanadoras(posicionesGanadorasN);
+                    
+                    System.out.println(posicionesGanadorasN);
+
                 }
             }
         }
@@ -294,12 +365,13 @@ public class Partida {
         }
     }
     
-    public void mostrarTablero(String[][] tablero, boolean mostrar){
+    public void mostrarTablero(String[][] tablero, boolean mostrar, boolean hayGanador){
         String[] letras ={"A","B","C"}; 
         
         if(mostrar){
             System.out.println("   1  2  3  4  5  6");
         }
+        System.out.println(Arrays.toString(this.getFichasGanadoras()));
         String linea = " +--+--+--+--+--+--+";
         System.out.println(linea);
         for (int i = 0; i < tablero.length; i++) {
@@ -311,43 +383,62 @@ public class Partida {
                     fila = " ";
                 }
                 fila+="|";
-                
+                boolean fichaGanadoraEncontrada = false;
                 for (int j = 0; j < tablero[0].length; j++) {
-                    if ((tablero[i][j].charAt(1) + "").equals("N")) {
-                        if ((tablero[i][j].charAt(0) + "").equals("C")) {
-                            if (z % 2 == 0) {
-                                fila += " ●|";
-                            } else {
-                                fila += "● |";
+                    
+                    if(hayGanador){
+                        //agregar fichas ganadoras
+                        for(int k = 0; k < this.getFichasGanadoras().length; k=k+2){
+                            
+                            if(this.getFichasGanadoras()[k] == i && this.getFichasGanadoras()[k+1] == j){
+                                fichaGanadoraEncontrada = true;
+                                if(this.hayGanador(this.getTablero(), true, false).equals("Blanco")){
+                                    fila += "OO|";
+                                }
+                                else{
+                                    fila += "XX|";
+                                }
                             }
                         }
-                        if ((tablero[i][j].charAt(0) + "").equals("D")) {
-                            if (z % 2 == 0) {
-                                fila += "● |";
-                            } else {
-                                fila += " ●|";
-                            }
-                        }
-                    } else {
-                        if ((tablero[i][j].charAt(1) + "").equals("B")) {
+                    }
+                    if(!fichaGanadoraEncontrada){
+                        if ((tablero[i][j].charAt(1) + "").equals("N")) {
                             if ((tablero[i][j].charAt(0) + "").equals("C")) {
                                 if (z % 2 == 0) {
-                                    fila += " ○|";
+                                    fila += " ●|";
                                 } else {
-                                    fila += "○ |";
+                                    fila += "● |";
                                 }
                             }
                             if ((tablero[i][j].charAt(0) + "").equals("D")) {
                                 if (z % 2 == 0) {
-                                    fila += "○ |";
+                                    fila += "● |";
                                 } else {
-                                    fila += " ○|";
+                                    fila += " ●|"; 
                                 }
                             }
                         } else {
-                            fila += "  |";
-                        }
+                            if ((tablero[i][j].charAt(1) + "").equals("B")) {
+                                if ((tablero[i][j].charAt(0) + "").equals("C")) {
+                                    if (z % 2 == 0) {
+                                        fila += " ○|";
+                                    } else {
+                                        fila += "○ |";
+                                    }
+                                }
+                                if ((tablero[i][j].charAt(0) + "").equals("D")) {
+                                    if (z % 2 == 0) {
+                                        fila += "○ |";
+                                    } else {
+                                        fila += " ○|";
+                                    }
+                                }
+                            } else {
+                                fila += "  |";
+                            }
+                        }    
                     }
+                    
 
                 }
                 System.out.println(fila);
@@ -370,6 +461,7 @@ public class Partida {
         if(controlBlanco){
             //Blanca, superior
             for(int z=0; z<3&&cantBDS!=3;z++){
+                cantBDS=0;
                 int j=0;
                 for(int i=0;i<tablero.length; i++,j++){
                     if(tablero[i][j+z].charAt(0)  == 'C' && tablero[i][j+z+1].charAt(0)  == 'D'){
@@ -382,6 +474,7 @@ public class Partida {
             }
             //Blanca Inferior
             for(int z=0; z<3&&cantBDI!=3;z++){
+                cantBDI=0;
                 int j=0;
                 for(int i=0;i<tablero.length; i++,j++){
                     if(tablero[2-i][j+z].charAt(0)  == 'C' && tablero[2-i][j+z+1].charAt(0)  == 'D'){
@@ -397,6 +490,7 @@ public class Partida {
         }else{
             //Negra Superior
             for(int z=0; z<3&&cantNDS!=3;z++){
+                cantNDS=0;
                 int j=0;
                 for(int i=0;i<tablero.length; i++,j++){
                     if(tablero[i][j+z].charAt(0)  == 'D' && tablero[i][j+z+1].charAt(0)  == 'C'){
@@ -410,6 +504,7 @@ public class Partida {
             
             //Negra Inferior
             for(int z=0; z<3&&cantNDI!=3;z++){
+                cantNDI=0;
                 int j=0;
                 for(int i=0;i<tablero.length; i++,j++){
                     if(tablero[2-i][j+z].charAt(0)  == 'D' && tablero[2-i][j+z+1].charAt(0)  == 'C'){
