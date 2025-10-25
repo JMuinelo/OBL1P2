@@ -3,10 +3,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 
-/**
- *
- * @author Toto
- */
+// Autores: Dylan Escobar - 357026 & Juan Muinelo 350499
 public class Sistema {
     private ArrayList<Jugador> listaJugadores = new ArrayList<>();
     private Partida partidaActual;
@@ -22,7 +19,7 @@ public class Sistema {
         this.partidaActual = partidaActual;
     }
     
-    public void agregarJugador(Jugador jugador){//getsetters
+    public void agregarJugador(Jugador jugador){
         this.listaJugadores.add(jugador);
         Collections.sort(this.getListaJugadores());
     }
@@ -47,10 +44,6 @@ public class Sistema {
         }
         return esta;
     }
-    
-    //JUGADORES GANADORES, pendiente hasta saber ordenar arraylist
-    
-    
     
     
 }

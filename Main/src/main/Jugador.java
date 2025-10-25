@@ -1,8 +1,5 @@
 package main;
-/**
- *
- * @author Toto
- */
+// Autores: Dylan Escobar - 357026 & Juan Muinelo 350499
 public class Jugador implements Comparable<Jugador>{
     private String nombre;
     private int edad;
@@ -61,7 +58,7 @@ public class Jugador implements Comparable<Jugador>{
     
     
     public boolean estaInvicto(){
-        return this.getPartidasGanadas() >= this.getPartidasJugadas(); //cuando empatan restar uno a partidas jugadas
+        return this.getPartidasGanadas() >= this.getPartidasJugadas(); 
     }
     
     @Override

@@ -5,10 +5,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
-/**
- *
- * @author Toto
- */
+// Autores: Dylan Escobar - 357026 & Juan Muinelo 350499
 public class Main {
 
     /**

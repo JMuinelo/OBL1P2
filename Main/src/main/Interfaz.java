@@ -1,4 +1,3 @@
-
 package main;
 
 import java.util.Arrays;
@@ -8,10 +7,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.Set;
 
-/**
- *
- * @author Toto
- */
+// Autores: Dylan Escobar - 357026 & Juan Muinelo 350499
 public class Interfaz {
     
     public static void menuPrincipal(Sistema sistema){
@@ -48,6 +44,7 @@ public class Interfaz {
                         break;
                 case 4:
                         mostrarRanking(sistema);
+                        break;
                 case 5:
                     break;
             }
@@ -129,7 +126,6 @@ public class Interfaz {
             }
         }//En este punto jug1 y jug2 tienen los valores de los indices del respectivo jugador en el arraylist de jugadores
         sistema.setPartidaActual(new Partida(sistema.getListaJugadores().get(jug1), sistema.getListaJugadores().get(jug2)));
-        //sistema.getPartidaActual().setFichasGanadoras(new int[] {0,0,0,1,0,2,0,3,0,4,0,5});
     }
     
     public static void agregarSecuencias(Sistema sistema){
@@ -198,7 +194,6 @@ public class Interfaz {
                 }
                 else{
                     System.out.println("Valor Fuera de Rango"+"("+min+"-"+max+"), reingrese:");
-                    //numero = in.nextInt();
                 }
             }catch(InputMismatchException e){
                 System.out.println("Ingrese solo numeros");

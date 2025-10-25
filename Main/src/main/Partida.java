@@ -3,6 +3,7 @@ package main;
 import java.util.Arrays;
 import java.util.Scanner;
 
+// Autores: Dylan Escobar - 357026 & Juan Muinelo 350499
 public class Partida {
     private String[][]tablero; //Celdas del tipo DB, CN
     private boolean partidaFinalizada;
@@ -110,7 +111,7 @@ public class Partida {
         int fila = 0;
         int columna = 0; 
         String[][] tablero = this.getTablero();
-        //tablero artificial
+
         for(int i = 0; i < tablero.length && !(jugadaGanadora.length() > 1); i++){
             for(int j=0; j < tablero[0].length && !(jugadaGanadora.length() > 1); j++){
                 String fichaActual = tablero[i][j];
@@ -323,7 +324,6 @@ public class Partida {
         if(mostrar){
             System.out.println("   1  2  3  4  5  6");
         }
-        System.out.println(Arrays.toString(this.getFichasGanadoras()));
         String linea = " +--+--+--+--+--+--+";
         System.out.println(linea);
         for (int i = 0; i < tablero.length; i++) {
@@ -355,7 +355,6 @@ public class Partida {
                         }
                     }
                     if(!fichaGanadoraEncontrada){
-                        //System.out.println("Entro al if");
                         if ((tablero[i][j].charAt(1) + "").equals("N")) {
                             if ((tablero[i][j].charAt(0) + "").equals("C")) {
                                 if (z % 2 == 0) {
