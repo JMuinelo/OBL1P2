@@ -61,7 +61,7 @@ public class Jugador implements Comparable<Jugador>{
     
     
     public boolean estaInvicto(){
-        return this.getPartidasGanadas() == this.getPartidasJugadas(); //cuando empatan restar uno a partidas jugadas
+        return this.getPartidasGanadas() >= this.getPartidasJugadas(); //cuando empatan restar uno a partidas jugadas
     }
     
     @Override

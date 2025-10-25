@@ -1,6 +1,7 @@
 package main;
 
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class Partida {
     private String[][]tablero; //Celdas del tipo DB, CN
@@ -341,9 +342,13 @@ public class Partida {
                             if(this.getFichasGanadoras()[k] == i && this.getFichasGanadoras()[k+1] == j){
                                 fichaGanadoraEncontrada = true;
                                 if(this.hayGanador(this.getTablero(), true, false).equals("Blanco")){
+                                    //ajuste manual, al llamar a hayGanador() se le suma una victoria al jugador blanco
+                                    this.getJugadorBlanco().setPartidasGanadas(this.getJugadorBlanco().getPartidasGanadas()-1);
                                     fila += "OO|";
                                 }
                                 else{
+                                    //ajuste manual, al llamar a hayGanador() se le suma una victoria al jugador Negro
+                                    this.getJugadorNegro().setPartidasGanadas(this.getJugadorNegro().getPartidasGanadas()-1);
                                     fila += "XX|";
                                 }
                             }
@@ -521,5 +526,59 @@ public class Partida {
             }
         }
         return hayDiagonalB || hayDiagonalN;
+    }
+    
+    public void rendicion(){
+        char turno = this.getTurno();
+        String jugador;
+        String rendido;;
+        
+        if(turno == 'B'){
+            sumar1NB('N');
+            jugador = "Negro";
+            rendido = "Blanco";
+        }else{
+            sumar1NB('B');
+            jugador = "Blanco";
+            rendido= "Negro";
+        }
+        this.setPartidaFinalizada(true);
+        System.out.println(rendido + " se ha rendido.");
+        System.out.println("\n***** GANADOR: "+jugador+" *****");
+    }
+    public void tablas(){
+        Scanner in = new Scanner(System.in);
+        char turno = this.getTurno();
+        String ofreceEmpate;
+        if(turno =='B'){
+            ofreceEmpate="Blanco";
+        }else{
+            ofreceEmpate="Negro";
+        }
+        
+        System.out.println("El jugador "+ ofreceEmpate + " esta ofreciendo un empate.");
+        System.out.println("\n ¿Quiere aceptar el empate? (Y - Aceptar; Otro caracter - Declinar");
+        String resp = in.nextLine();
+        if(resp.toUpperCase().equals("Y")){
+            System.out.println("\nLa partida Resulta en empate");
+            this.setPartidaFinalizada(true);
+        }
+    }
+    public void detectarTableroLleno(){
+        boolean tableroLleno=true;
+        String[][] tablero=this.getTablero();
+        for(int i=0;i<tablero.length;i++){
+            for(int j=0;j<tablero[0].length;j++){
+                if(tablero[i][j].equals("  ")){
+                    tableroLleno = false;
+                }
+            }
+        }
+        if(tableroLleno){
+            System.out.println("\n El tablero se ha llenado, se finaliza la partida");
+            System.out.println("\nLa partida Resulta en empate");
+            this.setPartidaFinalizada(true);
+
+        }
     }
 }   

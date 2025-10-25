@@ -76,25 +76,27 @@ public class Interfaz {
     
     public static void mostrarRanking(Sistema sistema){
         //1 ganadores
+        int contadorInvictos=1;
         Collections.sort(sistema.getListaJugadores(),
                 new Comparator<Jugador>(){
                     public int compare(Jugador j1, Jugador j2){
-                        return j2.getPartidasGanadas()-j1.getPartidasGanadas();
+                        return j2.getPartidasGanadas()-j1.getPartidasGanadas();//decreciente por victorias
                     }
                 }
                 );
         System.out.println("***** RANKING DE VICTORIAS *****");
         for(int i=0; i < sistema.getListaJugadores().size(); i++){
             Jugador jug = sistema.getListaJugadores().get(i);
-                System.out.println((i+1)+". "+jug.getNombre());
+                System.out.println((i+1)+". "+ jug.getNombre() + " (" + jug.getPartidasGanadas()+")");
         }
         Collections.sort(sistema.getListaJugadores());
-        //2 invivtos
+        //2 invictos
         System.out.println("***** RANKING INVICTOS *****");
         for(int i=0; i < sistema.getListaJugadores().size(); i++){
             Jugador jug = sistema.getListaJugadores().get(i);
             if(jug.estaInvicto() || jug.getPartidasJugadas() == 0){
-                System.out.println((i+1)+". "+jug.getNombre());
+                System.out.println((contadorInvictos)+". "+jug.getNombre());
+                contadorInvictos++;
             }
         }
     }
@@ -159,14 +161,14 @@ public class Interfaz {
                 String jugada = pedirJugada(sistema);
                 sistema.getPartidaActual().procesarJugada(jugada);
                 if(jugada.length() == 3){
-                    String jugador = sistema.getPartidaActual().hayGanador(sistema.getPartidaActual().getTablero(), true, true);
+                    String jugador = sistema.getPartidaActual().hayGanador(sistema.getPartidaActual().getTablero(), true, true);//Devuelve Blanco o negro
                     if(!jugador.equals("")){
                         sistema.getPartidaActual().setPartidaFinalizada(true);
                         System.out.println("\n***** GANADOR: "+jugador+" *****");
                         sistema.getPartidaActual().mostrarTablero(sistema.getPartidaActual().getTablero(), sistema.getPartidaActual().getMostrarBordes(),true);
                         
-                        //prueba
-                        //sistema.getPartidaActual().mostrarTablero(sistema.getPartidaActual().getTablero(), sistema.getPartidaActual().getMostrarBordes());
+                    }else{
+                        sistema.getPartidaActual().detectarTableroLleno();
                     }
                     sistema.getPartidaActual().cambiarTurno();
                 }
@@ -219,18 +221,16 @@ public class Interfaz {
             if(jugada.length()==1){
                 switch(jugada){
                     case "X":
-                        
-                        
+                        sistema.getPartidaActual().rendicion();
                         valida = false;
-                    break;
+                        break;
                     
                     case "B":
                         sistema.getPartidaActual().setMostrarBordes(true);
                         valida = false;
                         break;
                     case "T":
-                        
-                        
+                        sistema.getPartidaActual().tablas();
                         valida = false;
                         break;
                     
