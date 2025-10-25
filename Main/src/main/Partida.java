@@ -14,10 +14,6 @@ public class Partida {
     public int[] getFichasGanadoras() {
         return fichasGanadoras;
     }
-    //Fila, Columna
-    public void agregarFichaGanadora(int fichaGanadora, int i) {
-        this.fichasGanadoras[i] = fichaGanadora;
-    }
     
     public void setFichasGanadoras(int[] fichasGanadoras) {
         this.fichasGanadoras = fichasGanadoras;
@@ -54,7 +50,8 @@ public class Partida {
         String fichaInv;
         if(ficha.charAt(0)=='C'){
             fichaInv = "D";
-        }else{
+        }
+        else{
             fichaInv = "C";
         }
         fichaInv+=ficha.charAt(1);
@@ -164,42 +161,31 @@ public class Partida {
     }
     
     public String hayGanador(String[][] tablero, boolean controlBlanco, boolean controlNegro){
-        
         String ganador = "";
-        boolean hayGanador = false;
-        //vertical
         int[] posicionesGanadorasB = new int[12];
         int[] posicionesGanadorasN = new int[12];
         int cantB = 0;
         int cantN = 0;
         int contadorArrayB=0;
         int contadorArrayN=0;
-        for(int j=0; j < tablero[0].length&&(cantB!=3&&cantN!=3); j=j+2){
+        for(int j=0; j < tablero[0].length && cantB < 3 && cantN < 3; j = j+2){
             cantB = 0;
             cantN = 0;
-            boolean diagonalNegro=false;
-            boolean diagonalBlanco=false;
-            /*int contadorArrayB=0;
-            int contadorArrayN=0;*/
             for(int i = 0; i < posicionesGanadorasB.length;i++){
                 posicionesGanadorasB[i] = 0;
                 posicionesGanadorasN[i] = 0;
             }
-            for(int i=0; i < tablero.length; i++){
-                //System.out.println(Arrays.toString(posicionesGanadorasB));
-                //VERTICAL
-                    //Vertical
-                    if(controlBlanco){
-                        if(tablero[i][j].charAt(0) == 'C' && tablero[i][j+1].charAt(0) == 'D'){
-                            cantB++;
-                            posicionesGanadorasB[contadorArrayB]=i;
-                            posicionesGanadorasB[contadorArrayB+1]=j;
-                            posicionesGanadorasB[contadorArrayB+2]=i;
-                            posicionesGanadorasB[contadorArrayB+3]=j+1;
-                            contadorArrayB+=4;
-                            
-                        }
+            for(int i=0; i < tablero.length && cantB < 3 && cantN < 3; i++){
+                if(controlBlanco){
+                    if(tablero[i][j].charAt(0) == 'C' && tablero[i][j+1].charAt(0) == 'D'){
+                        cantB++;
+                        posicionesGanadorasB[contadorArrayB]=i;
+                        posicionesGanadorasB[contadorArrayB+1]=j;
+                        posicionesGanadorasB[contadorArrayB+2]=i;
+                        posicionesGanadorasB[contadorArrayB+3]=j+1;
+                        contadorArrayB+=4;
                     }
+                }
                 if(controlNegro){
                    if(tablero[i][j].charAt(0) == 'D' && tablero[i][j+1].charAt(0) == 'C'){
                         cantN++;
@@ -211,111 +197,78 @@ public class Partida {
                    }
                 }
             }
-            if(controlBlanco){
-                diagonalBlanco = enDiagonal(true);
-            }
-            if(controlNegro){
-                diagonalNegro = enDiagonal(false);
-
-            }
-            boolean resultadoBlanco = cantB == 3 ||diagonalBlanco;
-            boolean resultadoNegro = cantN == 3 || diagonalNegro;
-            if(resultadoBlanco && resultadoNegro){
-                if(this.getTurno() == 'B'){
-                    ganador = "Blanco";
-                    sumar1NB('B');
+        }
+        if(cantN < 3 && cantB < 3){
+            for(int i = 0 ; i < tablero.length && cantB < 3 && cantN < 3 ; i++){
+                contadorArrayB=0;
+                contadorArrayN=0;
+                cantB = 0;
+                cantN = 0;   
+                for(int f = 0; f < posicionesGanadorasB.length;f++){
+                    posicionesGanadorasB[f] = 0;
+                    posicionesGanadorasN[f] = 0;
                 }
-                else{
-                    ganador = "Negro";
-                    sumar1NB('N');
-                }
-                hayGanador = true;
-            }
-            else{
-                if(resultadoBlanco){
-                    ganador = "Blanco";
-                    hayGanador = true;
-                    sumar1NB('B');
-                }
-                if(resultadoNegro){
-                    ganador = "Negro";
-                    hayGanador = true;
-                    sumar1NB('N');
+                for(int j=0; j < tablero[0].length; j=j+2){
+                    if(controlBlanco){
+                        if(tablero[i][j].charAt(0) == 'C' && tablero[i][j+1].charAt(0) == 'D'){
+                            cantB++;
+                            posicionesGanadorasB[contadorArrayB]=i;
+                            posicionesGanadorasB[contadorArrayB+1]=j;
+                            posicionesGanadorasB[contadorArrayB+2]=i;
+                            posicionesGanadorasB[contadorArrayB+3]=j+1;
+                            contadorArrayB+=4;
+                        }
+                    }
+                    if(controlNegro){
+                        if(tablero[i][j].charAt(0) == 'D' && tablero[i][j+1].charAt(0) == 'C'){
+                            cantN++;
+                            posicionesGanadorasN[contadorArrayN]=i;
+                            posicionesGanadorasN[contadorArrayN+1]=j;
+                            posicionesGanadorasN[contadorArrayN+2]=i;
+                            posicionesGanadorasN[contadorArrayN+3]=j+1;
+                            contadorArrayN+=4;
+                        }
+                    }
                 }
             }
         }
-        //Si no hubo ganador, recorre de forma horizontal
-        if(!hayGanador){
-                for(int i = 0 ; i < tablero.length &&(cantB!=3&&cantN!=3); i++){
-                    contadorArrayB=0;
-                    contadorArrayN=0;
-                    cantB = 0;
-                    cantN = 0;   
-                    for(int f = 0; f < posicionesGanadorasB.length;f++){
-                        posicionesGanadorasB[f] = 0;
-                        posicionesGanadorasN[f] = 0;
-                    }
-                    for(int j=0; j < tablero[0].length; j=j+2){
-                        if(controlBlanco){
-                            if(tablero[i][j].charAt(0) == 'C' && tablero[i][j+1].charAt(0) == 'D'){
-                                cantB++;
-                                posicionesGanadorasB[contadorArrayB]=i;
-                                posicionesGanadorasB[contadorArrayB+1]=j;
-                                posicionesGanadorasB[contadorArrayB+2]=i;
-                                posicionesGanadorasB[contadorArrayB+3]=j+1;
-                                contadorArrayB+=4;
-                            }
-                        }
-                        if(controlNegro){
-                            if(tablero[i][j].charAt(0) == 'D' && tablero[i][j+1].charAt(0) == 'C'){
-                                cantN++;
-                                posicionesGanadorasN[contadorArrayN]=i;
-                                posicionesGanadorasN[contadorArrayN+1]=j;
-                                posicionesGanadorasN[contadorArrayN+2]=i;
-                                posicionesGanadorasN[contadorArrayN+3]=j+1;
-                                contadorArrayN+=4;
-                            }
-                        }
-                    }
-                }
+        if(cantN < 3 && cantB < 3){
+            if(enDiagonal(true)){
+                ganador = "Blanco";
+            }
+            else if(enDiagonal(false)){
+                ganador = "Negro";
+            }
+        }
+        else{
             if(cantB == 3 && cantN == 3){
                 if(this.getTurno() == 'B'){
                     ganador = "Blanco";
-                    hayGanador = true;
                     sumar1NB('B');
                     this.setFichasGanadoras(posicionesGanadorasB);
                 }
                 else{
                     ganador = "Negro";
-                    hayGanador = true;
                     sumar1NB('N');
                     this.setFichasGanadoras(posicionesGanadorasN);
                 }
             }
             else{
                 if(cantB == 3){
-                    
                     ganador = "Blanco";
-                    hayGanador = true;
                     sumar1NB('B');
                     this.setFichasGanadoras(posicionesGanadorasB);
-                    
-
                 }
                 if(cantN == 3){
                     ganador = "Negro";
-                    hayGanador = true;
                     sumar1NB('N');
                     this.setFichasGanadoras(posicionesGanadorasN);
-                    
-                    System.out.println(posicionesGanadorasN);
-
                 }
             }
         }
         return ganador;
     }
-    
+
     public void sumar1NB(char ganador){
         this.jugadorBlanco.setPartidasJugadas(this.jugadorBlanco.getPartidasJugadas()+1);
         this.jugadorNegro.setPartidasJugadas(this.jugadorNegro.getPartidasJugadas()+1);
@@ -333,24 +286,23 @@ public class Partida {
         //la funcion asume datos validos
         if (jugada.length() == 3) {
             String ficha = "";
-            //funcion random
             int col = Character.getNumericValue(jugada.charAt(1)) - 1;
             int fila = 2;
-
             if (jugada.charAt(0) == 'A') {
                 fila = 0;
-            } else if (jugada.charAt(0) == 'B') {
+            } 
+            else if (jugada.charAt(0) == 'B') {
                 fila = 1;
-
-            } else {
+            }
+            else{
                 fila = 2;
             }
-            if (jugada.charAt(2) != 'I') {
+            if(jugada.charAt(2) != 'I') {
                 ficha += jugada.charAt(2);
                 ficha += (this.getTurno() + "");
                 this.agregarFicha(ficha, fila, col);
-
-            } else {
+            }
+            else{
                 this.invertirFicha(fila, col);
             }
         }
@@ -367,7 +319,6 @@ public class Partida {
     
     public void mostrarTablero(String[][] tablero, boolean mostrar, boolean hayGanador){
         String[] letras ={"A","B","C"}; 
-        
         if(mostrar){
             System.out.println("   1  2  3  4  5  6");
         }
@@ -383,13 +334,10 @@ public class Partida {
                     fila = " ";
                 }
                 fila+="|";
-                boolean fichaGanadoraEncontrada = false;
                 for (int j = 0; j < tablero[0].length; j++) {
-                    
+                    boolean fichaGanadoraEncontrada = false;
                     if(hayGanador){
-                        //agregar fichas ganadoras
                         for(int k = 0; k < this.getFichasGanadoras().length; k=k+2){
-                            
                             if(this.getFichasGanadoras()[k] == i && this.getFichasGanadoras()[k+1] == j){
                                 fichaGanadoraEncontrada = true;
                                 if(this.hayGanador(this.getTablero(), true, false).equals("Blanco")){
@@ -402,6 +350,7 @@ public class Partida {
                         }
                     }
                     if(!fichaGanadoraEncontrada){
+                        //System.out.println("Entro al if");
                         if ((tablero[i][j].charAt(1) + "").equals("N")) {
                             if ((tablero[i][j].charAt(0) + "").equals("C")) {
                                 if (z % 2 == 0) {
@@ -438,26 +387,29 @@ public class Partida {
                             }
                         }    
                     }
-                    
-
                 }
                 System.out.println(fila);
             }
             System.out.println(linea);
         }
-
     }
     
     public boolean enDiagonal(boolean controlBlanco){
-        boolean hayDiagonal=false;
+        boolean hayDiagonalB=false;
+        boolean hayDiagonalN=false;
         String[][] tablero = this.getTablero();
-        
         int cantBDS = 0; //Blanco Diagonal desde Superior
         int cantNDS  =0;
         int cantBDI = 0;
         int cantNDI = 0;
-        
-        
+        int[] posicionesGanadorasB = new int[12];
+        int[] posicionesGanadorasN = new int[12];
+        int contadorArrayN = 0;
+        int contadorArrayB = 0;
+        for(int i = 0; i < posicionesGanadorasB.length;i++){
+            posicionesGanadorasB[i] = 0;
+            posicionesGanadorasN[i] = 0;
+        }
         if(controlBlanco){
             //Blanca, superior
             for(int z=0; z<3&&cantBDS!=3;z++){
@@ -466,28 +418,42 @@ public class Partida {
                 for(int i=0;i<tablero.length; i++,j++){
                     if(tablero[i][j+z].charAt(0)  == 'C' && tablero[i][j+z+1].charAt(0)  == 'D'){
                         cantBDS++;
+                        posicionesGanadorasB[contadorArrayB]=i;
+                        posicionesGanadorasB[contadorArrayB+1]=j+z;
+                        posicionesGanadorasB[contadorArrayB+2]=i;
+                        posicionesGanadorasB[contadorArrayB+3]=j+z+1;
+                        contadorArrayB+=4;
                     }
                     if(cantBDS==3){
-                        hayDiagonal=true;  
+                        hayDiagonalB=true;  
                     }
                 }
             }
-            //Blanca Inferior
-            for(int z=0; z<3&&cantBDI!=3;z++){
-                cantBDI=0;
-                int j=0;
-                for(int i=0;i<tablero.length; i++,j++){
-                    if(tablero[2-i][j+z].charAt(0)  == 'C' && tablero[2-i][j+z+1].charAt(0)  == 'D'){
-                        cantBDI++;
-                    }
-                    if(cantBDI==3){
-                        hayDiagonal=true;  
+            if(!hayDiagonalB){
+                //Blanca Inferior
+                contadorArrayB = 0;
+                for(int i = 0; i < posicionesGanadorasB.length;i++){
+                    posicionesGanadorasB[i] = 0;
+                }
+                for(int z=0; z < 3 && cantBDI != 3;z++){
+                    int j=0;
+                    for(int i=0;i<tablero.length; i++,j++){
+                        if(tablero[2-i][j+z].charAt(0)  == 'C' && tablero[2-i][j+z+1].charAt(0)  == 'D'){
+                            cantBDI++;
+                            posicionesGanadorasB[contadorArrayB]=2-i;
+                            posicionesGanadorasB[contadorArrayB+1]=j+z;
+                            posicionesGanadorasB[contadorArrayB+2]=2-i;
+                            posicionesGanadorasB[contadorArrayB+3]=j+z+1;
+                            contadorArrayB+=4;
+                        }
+                        if(cantBDI==3){
+                            hayDiagonalB=true;  
+                        }
                     }
                 }
             }
-            
-            
-        }else{
+        }
+        else{
             //Negra Superior
             for(int z=0; z<3&&cantNDS!=3;z++){
                 cantNDS=0;
@@ -495,30 +461,65 @@ public class Partida {
                 for(int i=0;i<tablero.length; i++,j++){
                     if(tablero[i][j+z].charAt(0)  == 'D' && tablero[i][j+z+1].charAt(0)  == 'C'){
                         cantNDS++;
+                        posicionesGanadorasN[contadorArrayN]=i;
+                        posicionesGanadorasN[contadorArrayN+1]=j+z;
+                        posicionesGanadorasN[contadorArrayN+2]=i;
+                        posicionesGanadorasN[contadorArrayN+3]=j+z+1;
+                        contadorArrayN+=4;
                     }
                     if(cantNDS==3){
-                        hayDiagonal=true;  
+                        hayDiagonalN=true;  
                     }
                 }
             }
-            
-            //Negra Inferior
-            for(int z=0; z<3&&cantNDI!=3;z++){
-                cantNDI=0;
-                int j=0;
-                for(int i=0;i<tablero.length; i++,j++){
-                    if(tablero[2-i][j+z].charAt(0)  == 'D' && tablero[2-i][j+z+1].charAt(0)  == 'C'){
-                        cantNDI++;
-                    }
-                    if(cantNDI==3){
-                        hayDiagonal=true;  
+            if(!hayDiagonalN){
+                //Negra Inferior
+                contadorArrayN = 0;
+                for(int i = 0; i < posicionesGanadorasN.length;i++){
+                    posicionesGanadorasN[i] = 0;
+                }
+                for(int z=0; z<3&&cantNDI!=3;z++){
+                    int j=0;
+                    for(int i=0;i<tablero.length; i++,j++){
+                        if(tablero[2-i][j+z].charAt(0)  == 'D' && tablero[2-i][j+z+1].charAt(0)  == 'C'){
+                            cantNDI++;
+                            posicionesGanadorasN[contadorArrayN]=2-i;
+                            posicionesGanadorasN[contadorArrayN+1]=j+z;
+                            posicionesGanadorasN[contadorArrayN+2]=2-i;
+                            posicionesGanadorasN[contadorArrayN+3]=j+z+1;
+                            contadorArrayN+=4;
+                        }
+                        if(cantNDI==3){
+                            hayDiagonalN=true;  
+                        }
                     }
                 }
             }
         }
-        
-        
-        return hayDiagonal;
+        if(hayDiagonalB && hayDiagonalN){
+            if(this.getTurno() == 'B'){
+                this.setFichasGanadoras(posicionesGanadorasB);
+                sumar1NB('B');
+                hayDiagonalN = false;
+            }
+            else{
+                hayDiagonalB = false;
+                this.setFichasGanadoras(posicionesGanadorasN);
+                sumar1NB('N');
+            }
+        }
+        else{
+            if(hayDiagonalB){
+                this.setFichasGanadoras(posicionesGanadorasB);
+                sumar1NB('B');
+                hayDiagonalN = false;
+            }
+            if(hayDiagonalN){
+                hayDiagonalB = false;
+                this.setFichasGanadoras(posicionesGanadorasN);
+                sumar1NB('N');
+            }
+        }
+        return hayDiagonalB || hayDiagonalN;
     }
-    
 }   
