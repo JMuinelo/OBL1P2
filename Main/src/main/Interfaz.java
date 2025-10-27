@@ -9,27 +9,18 @@ import java.util.Set;
 
 // Autores: Dylan Escobar - 357026 & Juan Muinelo 350499
 public class Interfaz {
-    
     public static void menuPrincipal(Sistema sistema){
-        ;
         Scanner in = new Scanner(System.in);
         System.out.println("Bienvenido al Medio Tateti!");
         System.out.println("Autores: Dylan Escobar - 357026 & Juan Muinelo 350499\n");
-        
-         
-        
-        
         int opcion = 0;
-        
-        
         while(opcion!=5){
-            System.out.println("Elija una opcion para continuar:\n");
+            System.out.println("\n****** MENÚ ******\n");
             System.out.println("1. Ingresar un Jugador");
             System.out.println("2. Comenzar Partida");
             System.out.println("3. Continuacion de Partida");
             System.out.println("4. Ranking & Invictos");
             System.out.println("5. Salir");
-            
             opcion = pedirNumero("Ingrese numero a continuacion: ", 1, 5);
 
             switch (opcion){
@@ -46,15 +37,11 @@ public class Interfaz {
                         mostrarRanking(sistema);
                         break;
                 case 5:
-                    break;
+                        break;
             }
         }
-            
-        
-        
-        
-        
     }
+    
     public static void ingresarJugadorInterfaz(Sistema sistema){
         Scanner in = new Scanner(System.in);
         
@@ -64,8 +51,6 @@ public class Interfaz {
         while(!sistema.nombreDisponible(nombre)){
             System.out.println("El nombre no esta disponible, Ingrese otro por favor");
             nombre = in.nextLine();
-            
-            
         }
         int edad = pedirNumero("Ingrese edad", 0, 100);
         sistema.agregarJugador((new Jugador(nombre, edad)));
@@ -81,14 +66,14 @@ public class Interfaz {
                     }
                 }
                 );
-        System.out.println("***** RANKING DE VICTORIAS *****");
+        System.out.println("\n***** RANKING DE VICTORIAS *****");
         for(int i=0; i < sistema.getListaJugadores().size(); i++){
             Jugador jug = sistema.getListaJugadores().get(i);
                 System.out.println((i+1)+". "+ jug.getNombre() + " (" + jug.getPartidasGanadas()+")");
         }
         Collections.sort(sistema.getListaJugadores());
         //2 invictos
-        System.out.println("***** RANKING INVICTOS *****");
+        System.out.println("\n***** RANKING INVICTOS *****");
         for(int i=0; i < sistema.getListaJugadores().size(); i++){
             Jugador jug = sistema.getListaJugadores().get(i);
             if(jug.estaInvicto() || jug.getPartidasJugadas() == 0){
@@ -104,14 +89,11 @@ public class Interfaz {
         int jug1 = 0;
         int jug2 = -1;
         boolean loop = true;
-        /////////////////////////////////////////////////////////
-        
         System.out.println("***** Lista de Jugadores *****");
         for(int i=0; i < sistema.getListaJugadores().size(); i++){
             System.out.println("\n"+(i+1)+". "+sistema.getListaJugadores().get(i).getNombre());
         }
         jug1 = pedirNumero("Seleccione el 1er jugador: ", 1, max) - 1;
-            
         while(loop){
             System.out.println("***** Lista de Jugadores *****");
             for(int i=0; i < sistema.getListaJugadores().size(); i++){
@@ -119,7 +101,6 @@ public class Interfaz {
             }
             jug2 = pedirNumero("Seleccione el 2do jugador: ", 1, max) - 1;
             loop = false;
-                
             if(jug2 == jug1){
                 System.out.println("\nADVERTENCIA: Los jugadores no pueden ser iguales");
                 loop = true;
@@ -173,22 +154,16 @@ public class Interfaz {
         }else{
             System.out.println("No hay suficientes jugadores para comenzar una nueva partida.");
         }
-        
-        
-        
     }
     
     public static int pedirNumero(String texto, int min, int max){
         Scanner in = new Scanner(System.in);
         boolean valido=false;
-        
         int numero=0;
         while(!valido){
             try{
                 System.out.println(texto);
                 numero = in.nextInt();
-                
-
                 if(numero >= min && numero <= max){
                     valido = true;
                 }
@@ -201,9 +176,8 @@ public class Interfaz {
             }
         }
         return numero;
-        
-        
     }
+
     public static String pedirJugada(Sistema sistema){
         String retorno ="";
         boolean valida =true;
@@ -219,7 +193,6 @@ public class Interfaz {
                         sistema.getPartidaActual().rendicion();
                         valida = false;
                         break;
-                    
                     case "B":
                         sistema.getPartidaActual().setMostrarBordes(true);
                         valida = false;

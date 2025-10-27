@@ -7,22 +7,9 @@ import java.util.Arrays;
 
 // Autores: Dylan Escobar - 357026 & Juan Muinelo 350499
 public class Main {
-
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) throws UnsupportedEncodingException {
         System.setOut(new PrintStream(System.out, true, StandardCharsets.UTF_8.name()));
-        
         Sistema sistema = new Sistema();
-
-        Jugador j1 = new Jugador("Pedro", 33);
-        Jugador j2 = new Jugador("Nombre2", 20);
-        sistema.agregarJugador(j1);
-        sistema.agregarJugador(j2);
-        
         Interfaz.menuPrincipal(sistema);
-        
     }
-    
 }

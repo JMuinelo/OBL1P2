@@ -530,21 +530,21 @@ public class Partida {
     public void rendicion(){
         char turno = this.getTurno();
         String jugador;
-        String rendido;;
-        
-        if(turno == 'B'){
-            sumar1NB('N');
-            jugador = "Negro";
+        String rendido;
+        if(turno == 'B'){        
+            this.sumar1NB('N');
+            jugador = "NEGRO";
             rendido = "Blanco";
         }else{
-            sumar1NB('B');
-            jugador = "Blanco";
+            this.sumar1NB('B');
+            jugador = "BLANCO";
             rendido= "Negro";
         }
         this.setPartidaFinalizada(true);
         System.out.println(rendido + " se ha rendido.");
         System.out.println("\n***** GANADOR: "+jugador+" *****");
     }
+    
     public void tablas(){
         Scanner in = new Scanner(System.in);
         char turno = this.getTurno();
@@ -554,7 +554,6 @@ public class Partida {
         }else{
             ofreceEmpate="Negro";
         }
-        
         System.out.println("El jugador "+ ofreceEmpate + " esta ofreciendo un empate.");
         System.out.println("\n ¿Quiere aceptar el empate? (Y - Aceptar; Otro caracter - Declinar");
         String resp = in.nextLine();
@@ -577,7 +576,6 @@ public class Partida {
             System.out.println("\n El tablero se ha llenado, se finaliza la partida");
             System.out.println("\nLa partida Resulta en empate");
             this.setPartidaFinalizada(true);
-
         }
     }
 }   
